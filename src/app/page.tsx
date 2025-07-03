@@ -1,9 +1,10 @@
-import { Button } from "@/components/ui/button";
+import LoginPage from "@/pages/loginPage/LoginPage";
 
 export default function Home() {
+  
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <Button>버튼</Button>
+    <div className="flex items-center justify-center">
+      <LoginPage />
     </div>
   );
 }

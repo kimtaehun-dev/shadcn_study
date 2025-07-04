@@ -1,36 +1,17 @@
 'use client'
-import React, { useState } from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
-import 'react-big-calendar/lib/css/react-big-calendar.css'; // 기본 CSS 임포트
-import {reducingDate,formatDateToString } from '@/lib/fixdate';
-import EventDialog from './Dialog';
+import React, { useState, useEffect } from 'react';
 
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import {reducingDate,formatDateToString, ReducingDateType, ConvertedDateType } from '@/lib/fixdate';
+import moment from 'moment';
+
+import { getEventsData } from '@/features/getEventsData/getEventsData';
+import EventDialog from './Dialog';
+import CheckDialog from './CheckDialog';
+
+import 'react-big-calendar/lib/css/react-big-calendar.css'; 
 moment.locale('ko');
 const localizer = momentLocalizer(moment); // 또는 dateFnsLocalizer 사용
-
-const apiEvents = [
-  {
-    start: "2025-7-10-10",
-    end: "2025-7-10-12",
-    title: '회의',
-    color: '#63f17b',
-  },
-  {
-    start: "2025-7-11-14-0",
-    end: "2025-7-11-16-0",
-    title: '프로젝트 발표',
-    color: '#636df1',
-  },
-  {
-    start: "2025-7-7-14-0",
-    end:"2025-7-11-16-0",
-    title: '프로젝트 기간',
-    color: '#f19c63',
-  },
-];
-
-const parsingDate = reducingDate(apiEvents);
 type eType = {
   start: Date;
   end: Date;
@@ -38,7 +19,7 @@ type eType = {
   color: string;
 }
 
-const eventStyleGetter = (event: eType) => ({
+const eventStyleGetter = (event: ConvertedDateType) => ({
   style: {
     backgroundColor: event.color?.trim() || '#6366f1',
     color: '#fff',
@@ -50,44 +31,55 @@ const eventStyleGetter = (event: eType) => ({
 
 
 function MyCalendar() {
+  const [apiUserEvent, setApiUserEvent] = useState<ConvertedDateType[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectEvent, setSelectEvent] = useState<eType>({
     start : new Date(),
     end : new Date(),
     title: "",
     color : "",
-
   });
+
+  useEffect(()=>{
+    async function fetchDtat(){
+    const res = await getEventsData();
+    if (res?.result) {
+      const newEvents = reducingDate(res.result);
+      setApiUserEvent(newEvents);
+      }
+    }
+    fetchDtat();
+  },[]);
   return (
     <>
       <div className="p-4 bg-background rounded-lg shadow [&_.rbc-event]:text-sm">
         <Calendar
+        className="
+        [&_.rbc-day-bg:nth-child(1)]:bg-red-50 
+        [&_.rbc-day-bg:nth-child(7)]:bg-blue-50
+          "
           localizer={localizer}
-          events={parsingDate}
+          events={apiUserEvent}
           startAccessor="start"
           endAccessor="end"
-          style={{ 
-            height: 700, 
-          }}
           eventPropGetter={eventStyleGetter}
-          selectable
-          onSelectSlot = {(slotInfo)=>{alert(JSON.stringify(slotInfo))}}
-          onSelectEvent = {(event)=>{
+          onSelectEvent={(event) => {
             setSelectEvent(event);
             setDialogOpen(true);
           }}
+          selectable
+          onSelectSlot = {(slotInfo)=>{alert(JSON.stringify(slotInfo))}}
+          style={{ height: 700 }}
         />
       </div>
       <EventDialog 
         open={dialogOpen}
         onOpenChange={setDialogOpen}
-        title='일정확인'
-        description='일정확인용 다이얼로그'>
-        <div>
-          <p>{`일정 이름 : ${selectEvent.title}`}</p>
-          <p>{`일정 시작일 : ${formatDateToString(selectEvent.start)}`}</p>
-          <p>{`일정 종료일 : ${formatDateToString(selectEvent.end)}`}</p>
-        </div>
+        >
+          <CheckDialog 
+          startDate={formatDateToString(selectEvent.start)} 
+          endDate={formatDateToString(selectEvent.end)} 
+          title={selectEvent.title}/>
       </EventDialog>
     </>
   );

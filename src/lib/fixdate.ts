@@ -1,11 +1,11 @@
-type ReducingDateType = {
+export type ReducingDateType = {
   start: string;
   end: string;
   title: string;
   color: string;
 };
 
-type ConvertedDateType = {
+export type ConvertedDateType = {
   start: Date;
   end: Date;
   title: string;

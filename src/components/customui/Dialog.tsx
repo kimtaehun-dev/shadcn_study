@@ -19,7 +19,7 @@ type EventDialogProps = {
 export default function EventDialog({
   open,
   onOpenChange,
-  title = '이벤트',
+  title = '이벤트 확인 및 등록',
   description = '',
   children
 }: EventDialogProps) {

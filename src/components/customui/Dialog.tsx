@@ -7,8 +7,6 @@ import {
   DialogDescription,
   DialogClose,
 } from '@/components/ui/dialog';
-import { X } from 'lucide-react';
-import { Button } from '../ui/button';
 
 type EventDialogProps = {
   open: boolean;

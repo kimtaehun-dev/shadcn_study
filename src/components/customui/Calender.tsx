@@ -37,15 +37,17 @@ type eType = {
   title: string;
   color: string;
 }
-const eventStyleGetter = (event:eType) => ({
+
+const eventStyleGetter = (event: eType) => ({
   style: {
-    backgroundColor: event.color || '#3b82f6',
+    backgroundColor: event.color?.trim() || '#6366f1',
+    color: '#fff',
     borderRadius: '4px',
-    color: 'white',
     padding: '4px 8px',
     fontSize: '0.875rem',
   },
 });
+
 
 function MyCalendar() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -64,7 +66,9 @@ function MyCalendar() {
           events={parsingDate}
           startAccessor="start"
           endAccessor="end"
-          style={{ height: 700 }}
+          style={{ 
+            height: 700, 
+          }}
           eventPropGetter={eventStyleGetter}
           selectable
           onSelectSlot = {(slotInfo)=>{alert(JSON.stringify(slotInfo))}}

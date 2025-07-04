@@ -135,4 +135,10 @@ body{
   body {
     @apply bg-background text-foreground;
   }
+  /* 캘린더 최초 로드시 파란점 생기는거 차단 */
+  .rbc-event:not([style]){
+    background-color: transparent !important;
+  }
 }
+
+

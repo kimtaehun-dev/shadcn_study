@@ -3,6 +3,7 @@ type ResultType = {
   end: string;
   title : string;
   color : string;
+  stage : number;
 }
 type apiResType = {
   result : ResultType[];

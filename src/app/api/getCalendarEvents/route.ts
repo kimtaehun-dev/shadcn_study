@@ -2,13 +2,13 @@ import { NextResponse } from 'next/server';
 import { fakerKO as faker } from '@faker-js/faker';
 
 export async function GET(res:  NextResponse){
-  const count = 10;
+  const count = 30;
   const result = [];
   const withMinute = false;
     for (let i = 0; i < count; i++) {
       const start = faker.date.between({
         from: '2025-07-01T08:00:00',
-        to: '2025-07-15T18:00:00',
+        to: '2025-07-30T18:00:00',
       });
     const end = new Date(start.getTime() + 1000 * 60 * 60 * 2); // +2시간
 
@@ -18,10 +18,12 @@ export async function GET(res:  NextResponse){
       // title: faker.word.words({ count: { min: 1, max: 3 } }), // 제목 최대 3단어
       title: faker.location.city(),
       color: getRandomColor(),
+      stage: faker.number.int({ min: 1, max: 4 }),
+      allDay : faker.datatype.boolean()
     });
   }
 
-  console.log(JSON.stringify(result));
+  // console.log(JSON.stringify(result));
   return NextResponse.json(
       {result},
       { status: 200 }

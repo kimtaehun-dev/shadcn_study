@@ -3,6 +3,7 @@ export type ReducingDateType = {
   end: string;
   title: string;
   color: string;
+  stage : number;
 };
 
 export type ConvertedDateType = {
@@ -10,6 +11,7 @@ export type ConvertedDateType = {
   end: Date;
   title: string;
   color: string;
+  stage : number;
 };
 
 type DateInput = {

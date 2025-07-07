@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import {reducingDate,formatDateToString, ReducingDateType, ConvertedDateType } from '@/lib/fixdate';
@@ -17,6 +17,7 @@ type eType = {
   end: Date;
   title: string;
   color: string;
+  stage : number;
 }
 
 const eventStyleGetter = (event: ConvertedDateType) => ({
@@ -38,6 +39,7 @@ function MyCalendar() {
     end : new Date(),
     title: "",
     color : "",
+    stage : 1,
   });
 
   useEffect(()=>{
@@ -67,9 +69,13 @@ function MyCalendar() {
             setSelectEvent(event);
             setDialogOpen(true);
           }}
+          
+          components={{
+          }}
+          
           selectable
           onSelectSlot = {(slotInfo)=>{alert(JSON.stringify(slotInfo))}}
-          style={{ height: 700 }}
+          style={{ height: 800 }}
         />
       </div>
       <EventDialog 

@@ -4,7 +4,7 @@ import { calendarEventsMock } from "../__mocks__/calendarEvents.mock";
 
 const meta: Meta<typeof UserCalendarView> = {
   component: UserCalendarView,
-  title: "Widgets/Calendar",
+  title: "features/UserCalendar",
 };
 
 export default meta;

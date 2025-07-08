@@ -4,7 +4,8 @@ import moment from 'moment';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-import UserEvent from './Event';
+import UserEvent from './UserEvent';
+import CustomToolbar from './CustomToolbar';
 import { CalendarEventType } from '../types/calendarType';
 
 moment.locale('ko');
@@ -15,7 +16,6 @@ type UserCalendarView = {
 }
 export default function UserCalendarView({userEvent}:UserCalendarView){
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [view, setView] = useState('month');
   
   return (
     <Calendar
@@ -24,7 +24,6 @@ export default function UserCalendarView({userEvent}:UserCalendarView){
         [&_.rbc-day-bg:nth-child(7)]:bg-blue-50"
         date={currentDate}
         onNavigate={(newDate) => setCurrentDate(newDate)}
-        onView={(newView) => setView(newView)}
         localizer={localizer}
         events={userEvent}
         startAccessor="start"
@@ -33,7 +32,8 @@ export default function UserCalendarView({userEvent}:UserCalendarView){
         components={{
           event: (eventProps) => {
             return <UserEvent {...eventProps.event} />;
-          }
+          },
+          toolbar: CustomToolbar
         }}
       />
   )

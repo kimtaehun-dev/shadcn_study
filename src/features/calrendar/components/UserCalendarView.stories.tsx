@@ -13,5 +13,6 @@ type Story = StoryObj<typeof UserCalendarView>;
 export const Default: Story = {
   args: {
     userEvent: calendarEventsMock,
+    isMondayStart:false
   },
 };

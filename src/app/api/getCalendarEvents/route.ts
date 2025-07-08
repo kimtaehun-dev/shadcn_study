@@ -15,17 +15,16 @@ export async function GET(res:  NextResponse){
     result.push({
       start: formatDateStr(start, withMinute),
       end: formatDateStr(end, withMinute),
-      // title: faker.word.words({ count: { min: 1, max: 3 } }), // 제목 최대 3단어
       title: faker.location.city(),
       color: getRandomColor(),
       stage: faker.number.int({ min: 1, max: 4 }),
       allDay : faker.datatype.boolean()
     });
   }
-
-  // console.log(JSON.stringify(result));
+  const isMondayStart = faker.datatype.boolean();
+  console.log(isMondayStart);
   return NextResponse.json(
-      {result},
+      {isMondayStart,result},
       { status: 200 }
     );
 }

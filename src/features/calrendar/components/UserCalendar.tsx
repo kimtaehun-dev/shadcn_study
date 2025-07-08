@@ -1,5 +1,4 @@
 'use client'
-
 import { useEffect, useState } from 'react';
 //기능 내부 임포트
 import { getUserEvents } from '../services/getUserEvents';
@@ -10,21 +9,26 @@ import UserCalendarView from './UserCalendarView';
 
 export default function UserCalendar(){
   const [userEvent, setUserEvent] = useState<CalendarEventType[]>([]);
+  const [mondayStart, setMondayStart] = useState<boolean>(true);
   
   useEffect(()=>{
     async function fetchEvent(){
-      const res = await getUserEvents();
-      const newEvents = convertStringToDate(res);
-      console.log(newEvents);
+      const {result,isMondayStart} = await getUserEvents();
+      const newEvents = convertStringToDate(result);
       setUserEvent(newEvents);
-      }
-      fetchEvent();
+      setMondayStart(isMondayStart)
+    }
+    fetchEvent();
   },[])
   return(
     <>
-    {userEvent.length>0
-    ?(<UserCalendarView userEvent={userEvent}/>)
-    :( <p>이벤트를 불러오는 중입니다...</p>) } 
+    {userEvent.length>0?(
+    <UserCalendarView 
+      userEvent={userEvent} 
+      isMondayStart={mondayStart}
+      />):( 
+      <p>이벤트를 불러오는 중입니다...</p>
+      )} 
     </>
   )
 }

@@ -5,8 +5,8 @@ export async function getUserEvents(){
     const status = response.status;
     if(status!==200) throw new Error;
 
-    const { result } = await response.json();
-    return result;
+    const results = await response.json();
+    return results;
   }
   catch(error){
     console.log(error);

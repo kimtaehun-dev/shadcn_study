@@ -8,7 +8,7 @@ import { cva } from 'class-variance-authority';
 
 import UserEvent from './UserEvent';
 import CustomToolbar from './CustomToolbar';
-import { CalendarEventType } from '../types/calendarType';
+import { CalendarEventType, GetEventsType } from '../types/calendarType';
 
 
 const calendarVariants = cva('',{
@@ -41,7 +41,7 @@ export default function UserCalendarView({userEvent, isMondayStart=false}:UserCa
         date={currentDate}
         onNavigate={(newDate) => setCurrentDate(newDate)}
         localizer={localizer}
-        events={userEvent}
+        events={result}
         startAccessor="start"
         endAccessor="end"
         style={{ height: 800 }}

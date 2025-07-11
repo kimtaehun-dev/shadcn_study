@@ -20,3 +20,8 @@ export type ApiResponseType = {
   result : ApiCalendarEventType[],
   status : number;
 }
+
+export interface GetEventsType{
+  isMondayStart : boolean;
+  result : ApiCalendarEventType[]
+}

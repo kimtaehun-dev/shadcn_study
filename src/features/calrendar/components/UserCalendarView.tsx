@@ -41,7 +41,7 @@ export default function UserCalendarView({userEvent, isMondayStart=false}:UserCa
         date={currentDate}
         onNavigate={(newDate) => setCurrentDate(newDate)}
         localizer={localizer}
-        events={result}
+        events={userEvent}
         startAccessor="start"
         endAccessor="end"
         style={{ height: 800 }}

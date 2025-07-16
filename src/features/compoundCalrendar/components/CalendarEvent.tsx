@@ -7,7 +7,7 @@ export default function CalendarEvent
 ({start,end,title,color,stage, allDay}:CalendarEventType){
   const imagePath = selectStageBadge(stage);
   return (
-    <div className="flex flex-row p-1 rounded text-xs" style={{ backgroundColor: color }}>
+    <div className="flex flex-row rounded text-xs" style={{ backgroundColor: color }}>
       <Image
         src={imagePath}
         alt ={'badge'}

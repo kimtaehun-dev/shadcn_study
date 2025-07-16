@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from "react";
 
+import { cva } from "class-variance-authority";
 import { Calendar,momentLocalizer } from "react-big-calendar";
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import moment from 'moment'
@@ -8,9 +9,31 @@ import moment from 'moment'
 import { useCalendarContext } from "../provider/CalendarContext";
 import CalendarToolbar from "./CalendarToolbar";
 import CalendarEvent from "./CalendarEvent";
+import CalendarMonthHeader from "./CalendarMonthHead";
+
+const calendarVariants = cva(
+  `w-full h-full
+  [&_.rbc-row-bg]:!right-[0]
+  [&_.rbc-header]:!p-0
+  [&_.rbc-date-cell]:!text-center
+  [&_.rbc-date-cell]:!pr-0
+  [&_.rbc-event]:!p-0
+  `,{
+    variants : {
+      variant : {
+        clearBorder : `
+          [&_.rbc-month-view]:border-none! 
+          [&_.rbc-day-bg]:border-none!
+          [&_.rbc-header]:border-none!
+          [&_.rbc-month-row]:border-none!
+          `,
+        default : ``
+      }
+    }
+  }
+)
 
 const localizer = momentLocalizer(moment);
-
 export default function CalendarView(){
   const { events, isMondayStart, currentDate, setCurrentDate } = useCalendarContext();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -42,16 +65,21 @@ export default function CalendarView(){
   return (
     <div ref={containerRef} className="w-[354px] h-[586px]">
         <Calendar
+          className={calendarVariants({ variant: 'clearBorder' })}
           localizer={localizer}
           events={events}
           startAccessor="start"
           endAccessor="end"
+          view="month"
           date={currentDate}
           onNavigate={setCurrentDate}
           style={{ height: '100%' }}
           components={{
             event: (eventProps) => <CalendarEvent {...eventProps.event} />,
             toolbar: CalendarToolbar,
+            month :{
+              header : CalendarMonthHeader
+            }
           }}
         />
     </div>

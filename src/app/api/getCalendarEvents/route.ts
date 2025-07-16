@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { fakerKO as faker } from '@faker-js/faker';
 
 export async function GET(res:  NextResponse){
-  const count = 30;
+  const count = 10;
   const result = [];
   const withMinute = false;
     for (let i = 0; i < count; i++) {

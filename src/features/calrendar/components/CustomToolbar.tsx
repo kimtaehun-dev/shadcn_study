@@ -14,8 +14,6 @@ export default function CustomToolbar({
     <div className="rbc-toolbar flex justify-between items-center p-2">
       <span className="text-lg font-bold">{formatted}</span>
       <div className="flex gap-2">
-        <button onClick={() => onNavigate('PREV')}>이전</button>
-        <button onClick={() => onNavigate('NEXT')}>다음</button>
       </div>
     </div>
   );

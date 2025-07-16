@@ -1,56 +1,72 @@
 'use client'
-import { useState } from 'react';
-import moment from 'moment';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { useEffect, useRef, useState } from 'react'
+import moment from 'moment'
+import { Calendar, momentLocalizer } from 'react-big-calendar'
+import 'react-big-calendar/lib/css/react-big-calendar.css'
 
-import { cva } from 'class-variance-authority';
+import UserEvent from './UserEvent'
+import CustomToolbar from './CustomToolbar'
+import { CalendarEventType } from '../types/calendarType'
 
-import UserEvent from './UserEvent';
-import CustomToolbar from './CustomToolbar';
-import { CalendarEventType, GetEventsType } from '../types/calendarType';
+const localizer = momentLocalizer(moment)
 
+type Props = {
+  userEvent: CalendarEventType[]
+  isMondayStart?: boolean
+}
 
-const calendarVariants = cva('',{
-    variants:{
-      variant :{
-        monday: '[&_.rbc-day-bg:nth-child(6)]:bg-red-50 [&_.rbc-day-bg:nth-child(7)]:bg-blue-50',
-        sunday: '[&_.rbc-day-bg:nth-child(1)]:bg-red-50 [&_.rbc-day-bg:nth-child(7)]:bg-blue-50',
+export default function UserCalendarView({ userEvent, isMondayStart = false }: Props) {
+  const [currentDate, setCurrentDate] = useState(new Date())
+  const lastScrollTime = useRef(0)
+  const cooldown = 500 // 0.7초 이상 지나야 다음 스크롤 허용
+
+  useEffect(() => {
+    moment.updateLocale('ko', {
+      week: { dow: isMondayStart ? 1 : 0 },
+    })
+  }, [isMondayStart])
+
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    const handleWheel = (e: WheelEvent) => {
+      const now = Date.now()
+      if (now - lastScrollTime.current < cooldown) return
+
+      lastScrollTime.current = now
+      e.preventDefault()
+
+      if (e.deltaY > 0) {
+        // 스크롤 다운 → 다음 달
+        setCurrentDate(prev => moment(prev).add(1, 'month').toDate())
+      } else if (e.deltaY< 0) {
+        // 스크롤 업 → 이전 달
+        setCurrentDate(prev => moment(prev).subtract(1, 'month').toDate())
       }
     }
-  });
 
+    container.addEventListener('wheel', handleWheel, { passive: false })
+    return () => container.removeEventListener('wheel', handleWheel)
+  }, [])
 
-type UserCalendarView = {
-  userEvent :CalendarEventType[],
-  isMondayStart ?: boolean,
-}
-export default function UserCalendarView({userEvent, isMondayStart=false}:UserCalendarView){
-  const [currentDate, setCurrentDate] = useState(new Date());
-  //주 시작일 월,화 설정
-  moment.updateLocale('ko', {
-      week: {
-        dow: isMondayStart ? 1:0 
-      },
-    });
-  const localizer = momentLocalizer(moment);
-  const calendarClass = calendarVariants({ variant: isMondayStart ? 'monday' : 'sunday' });
   return (
-    <Calendar
-        className={calendarClass}
-        date={currentDate}
-        onNavigate={(newDate) => setCurrentDate(newDate)}
+    <div ref={containerRef} className="calendar-frame w-[354px] h-[586px]">
+      <Calendar
         localizer={localizer}
         events={userEvent}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: 800 }}
+        date={currentDate}
+        onNavigate={setCurrentDate}
+        style={{ height: '100%' }}
         components={{
-          event: (eventProps) => {
-            return <UserEvent {...eventProps.event} />;
-          },
-          toolbar: CustomToolbar
+          event: (eventProps) => <UserEvent {...eventProps.event} />,
+          toolbar: CustomToolbar,
         }}
       />
+    </div>
   )
 }

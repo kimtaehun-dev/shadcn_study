@@ -29,7 +29,9 @@ export default function RootLayout({
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <ReactQueryProvider>
             {process.env.NODE_ENV === 'development' && (<ReactQueryDevtools initialIsOpen={false} />)}
-          {children}
+            <div className="w-[363px] h-screen">
+              {children}
+          </div>
           </ReactQueryProvider>
         </body>
     </html>

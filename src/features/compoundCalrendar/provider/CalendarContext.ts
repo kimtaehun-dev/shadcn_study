@@ -1,11 +1,12 @@
+import { CalendarEventType } from "@/features/calrendar/types/calendarType";
 import { createContext, useContext } from "react";
-import { CalendarEventType } from "../../types/calendarType";
+
 
 type CalendarContextType = {
   events : CalendarEventType[];
   isMondayStart : boolean;
   currentDate : Date;
-  setDate : (date:Date)=>void;
+  setCurrentDate : React.Dispatch<React.SetStateAction<Date>>;
 }
 
 export const CalendarContext = createContext<CalendarContextType|null>(null);

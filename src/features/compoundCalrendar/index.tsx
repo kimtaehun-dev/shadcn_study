@@ -1,6 +1,6 @@
 'use client'
 import { ReactNode, useState } from "react";
-import { CalendarContext } from "./provider/context";
+import { CalendarContext } from "./provider/CalendarContext";
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "@/api/factory/keyFactory";
 import { userService } from "@/api/service/calendarEvent/userService";
@@ -11,18 +11,22 @@ import CalendarEvent from "./components/CalendarEvent";
 type CustomCalendarType = {
   children : ReactNode
 }
-export default function CustomCalendar({children}:CustomCalendarType){
+function CustomCalendar({children}:CustomCalendarType){
   const {data,status} = useQuery({
     queryKey : queryKeys.user.events().queryKey,
     queryFn : userService.events 
   })
-  const [currentDate, setCurrentDate] = useState(new Date())
+
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  if (status === 'pending') return <p>이벤트를 불러오는 중입니다...</p>;
+  if (status !== 'success') return null;
   return (
     <CalendarContext.Provider value={{
       events : data?.events || [],
       isMondayStart : data?.isMondayStart||true,
       currentDate:currentDate,
-      setDate : setCurrentDate
+      setCurrentDate : setCurrentDate
       }}>
       {children}
     </CalendarContext.Provider>
@@ -30,5 +34,5 @@ export default function CustomCalendar({children}:CustomCalendarType){
 }
 
 CustomCalendar.View = CalendarView;
-CustomCalendar.Toolbar = CalendarToolbar;
-CustomCalendar.Event = CalendarEvent;
+
+export default CustomCalendar;

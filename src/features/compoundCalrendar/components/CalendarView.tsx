@@ -10,14 +10,17 @@ import { useCalendarContext } from "../provider/CalendarContext";
 import CalendarToolbar from "./CalendarToolbar";
 import CalendarEvent from "./CalendarEvent";
 import CalendarMonthHeader from "./CalendarMonthHead";
+import CalendarDateHeader from "./CalendarDateHeader";
 
 const calendarVariants = cva(
   `w-full h-full
   [&_.rbc-row-bg]:!right-[0]
-  [&_.rbc-header]:!p-0
-  [&_.rbc-date-cell]:!text-center
   [&_.rbc-date-cell]:!pr-0
   [&_.rbc-event]:!p-0
+  [&_.rbc-today]:!bg-transparent
+  [&_.rbc-date-cell]:!pb-[4px]
+  [&_.rbc-event]:!mb-[3px] // 간격 줄이기
+  [&_.rbc-event-content]:truncate text-[12px]
   `,{
     variants : {
       variant : {
@@ -61,9 +64,9 @@ export default function CalendarView(){
     container.addEventListener('wheel', handleWheel, { passive: false })
     return () => container.removeEventListener('wheel', handleWheel)
     }, [isMondayStart])
-
+  
   return (
-    <div ref={containerRef} className="w-[354px] h-[586px]">
+    <div ref={containerRef} className="h-[655px]">
         <Calendar
           className={calendarVariants({ variant: 'clearBorder' })}
           localizer={localizer}
@@ -74,11 +77,13 @@ export default function CalendarView(){
           date={currentDate}
           onNavigate={setCurrentDate}
           style={{ height: '100%' }}
+          popup
           components={{
             event: (eventProps) => <CalendarEvent {...eventProps.event} />,
             toolbar: CalendarToolbar,
             month :{
-              header : CalendarMonthHeader
+              header : CalendarMonthHeader,
+              dateHeader : CalendarDateHeader
             }
           }}
         />

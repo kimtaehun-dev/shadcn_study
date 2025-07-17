@@ -62,6 +62,7 @@ export default function UserCalendarView({ userEvent, isMondayStart = false }: P
         date={currentDate}
         onNavigate={setCurrentDate}
         style={{ height: '100%' }}
+        dayLayoutAlgorithm={'no-overlap'}
         components={{
           event: (eventProps) => <UserEvent {...eventProps.event} />,
           toolbar: CustomToolbar,

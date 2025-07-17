@@ -5,8 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "@/api/factory/keyFactory";
 import { userService } from "@/api/service/calendarEvent/userService";
 import CalendarView from "./components/CalendarView";
-import CalendarToolbar from "./components/CalendarToolbar";
-import CalendarEvent from "./components/CalendarEvent";
 
 type CustomCalendarType = {
   children : ReactNode
